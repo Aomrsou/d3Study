@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+    <body>
+        <svg width="1200" height="600" id="mainsvg" class="svgs"></svg>
+    <script>
+        const data = [{name: 'Shao-Kui', value:1},
+        {name:'Wen-Yang', value:2}, {name:'Cai Yun', value:3}, {name:'Liang Yuan', value: 4}, 
+        {name:'Yuan-Chen', value:5}, {name:'Rui-Long', value:6}, {name:'Dong Xin', value:7}, 
+        {name:'He Yu', value:20}, {name:'Xiang-Li', value:12}, {name:'Godness', value:20}, 
+        {name:'Wei-Yu', value:15}, {name:'Chen Zheng', value:14}, 
+        {name:'Yu Peng', value:15}, {name:'Li Jian', value:18}]; 
+
+        const svg = d3.select('#mainsvg');
+        const width = +svg.attr('width');
+        const height = +svg.attr('height');
+        const margin = {top: 60, right:30, bottom: 60, left: 150};
+        const innerWidth = width - margin.left - margin.right;
+        const innerHeight = height - margin.bottom - margin.top;
+
+        const xScale = d3.scaleLinear()
+        .domain([d3.max(data, d => d.value), 0])
+        .range([0, innerHeight]);
+
+        const yScale = d3.scaleBand()
+        .domain(data.map(d => d.name))
+        .range([0, innerWidth])
+        .padding(0.2);
+
+        const g = svg.append('g').attr('id', 'maingroup')
+        .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+        const yAxis = d3.axisBottom(yScale);
+        g.append('g').call(yAxis).attr('transform', `translate(0, ${innerHeight})`);
+
+        const xAxis = d3.axisLeft(xScale);
+        g.append('g').call(xAxis);
+
+        data.forEach(d => {
+            g.append('rect')
+            .attr('width', yScale.bandwidth())
+            .attr('height', xScale(20 - d.value))
+            .attr('fill', 'black')
+            .attr('opacity', '0.8')
+            .attr('x', yScale(d.name))
+            .attr('transform', `translate(0, ${xScale(d.value)})`)
+        })
+
+        const yAxisGroup = g.append('g').call(xAxis)
+        .attr('id', 'yaxis')
+        .append('text')
+        .text('数值')
+        .attr('font-size', '2em')
+        .attr('transform', 'rotate(-90)') // y-axis label needs an additional transform; 
+        .attr('x', -innerHeight/2)
+        .attr('y', -80)
+        .attr('fill', 'black')
+
+        const xAxisGroup = g.append('g').call(yAxis)
+        .attr('id', 'xaxis')
+        .attr('transform', `translate(${0}, ${innerHeight})`)
+        .append('text')
+        .text('名字')
+        .attr('font-size', '3em')
+        .attr('x', innerWidth / 2)
+        .attr('y', 50)
+        .attr('fill', 'black')
+        .attr('text-anchor', 'middle');
+
+        d3.selectAll('.tick text').attr('font-size', '14px');
+        
+        g.append('text').text('一个柱状图')
+        .attr('font-size', '2em')
+        .attr('transform', `translate(${innerWidth/2}, -20)`)
+        .attr('text-anchor', 'middle')
+
+    </script>
+
+    </body> 
+</html>
