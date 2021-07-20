@@ -4,7 +4,7 @@
 
 ## 样例内容以及演示
 ### 入门 static下的html文件
-[a)Scale(演示比例尺)](https://1522017075.github.io/d3Study/static/f)Object.html)
+[a)Scale(演示比例尺)](https://1522017075.github.io/d3Study/static/\a)Object.html)
 [b)Axis(演示刻度轴)](https://1522017075.github.io/d3Study/static/b)Axis.html)
 [c)BarChart(演示坐标轴])(https://1522017075.github.io/d3Study/static/c)BarChart.html)
 [d)Transition(演示动画效果)](https://1522017075.github.io/d3Study/static/d)Transition.html)
