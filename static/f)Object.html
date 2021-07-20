@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    let rectWidth = 65;
+    let data = [
+        {width:12 , color: 11},{width:22 , color: 45},{width:14 , color: 24},
+        {width:12 , color: 34},{width:34 , color: 34},{width:32 , color: 41},
+        {width:14 , color: 24},{width:13 , color: 34},{width:12 , color: 43},
+        {width:15 , color: 54},{width:32 , color: 23}
+    ];
+
+    let svg = d3.select("body")
+        .append("svg")
+        .attr("width", 1300)
+        .attr("height", 800)
+
+    let colorScale = d3.scaleLinear()
+    .domain([0, 100])
+    .range(["#add8e6", "blue"])
+
+    // 比例尺
+    let xScale = d3.scaleBand()
+        .domain(d3.range(data.length))
+        .range([0, data.length * rectWidth]);
+
+    let yScale = d3.scaleLinear()
+        .domain([40, 0])
+        .range([0, 400]);
+
+    // 坐标轴
+    let xAxis = d3.axisBottom(xScale).ticks(data.length)
+    let yAxis = d3.axisLeft(yScale)
+
+    // 添加坐标轴到页面
+    svg.append("g")
+        .call(xAxis)
+        .attr("transform", "translate(100, 410)")
+
+    svg.append("g")
+        .call(yAxis)
+        .attr("transform", "translate(100, 10)")
+
+    function render(dataset) {
+
+        // 添加条形图到坐标轴内
+        svg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+
+        // 添加文字到每一条上
+        svg.selectAll(".MyText")
+            .data(dataset)
+            .enter()
+            .append("text")
+            .attr("class", "MyText")
+
+        svg.selectAll("rect")
+            .data(dataset)
+            .attr("width", rectWidth - 20)
+            .attr("height", 0)
+            .attr("x", (d, i) => 110 + (i * rectWidth))
+            .attr("y", 410)
+            .attr("fill", "white")
+            .transition()
+            .ease(d3.easeLinear)
+            .duration(300)
+            .attr("height", d => 400 - yScale(d.width))
+            .attr("y", (d) => 10 + yScale(d.width))
+            .attr("fill", d => colorScale(d.color))
+
+        svg.selectAll(".MyText")
+            .data(dataset)
+            .attr("class", "MyText")
+            .attr("transform", "translate(120, 30)")
+            .attr("x", (d, i) => xScale(i))
+            .attr("y", 410)
+            .attr("opacity", 0)
+            .text(d => d.width)
+            .attr("text-anchor", "right")
+            .transition()
+            .ease(d3.easeLinear)
+            .duration(300)
+            .attr("y", (d) => yScale(d.width))
+            .attr("opacity", 1)
+
+
+        svg.selectAll("rect")
+            .data(dataset)
+            .exit()
+            .remove()
+
+        svg.selectAll(".MyText")
+            .data(dataset)
+            .exit()
+            .remove()
+    }
+
+    setInterval(() => {
+        data.shift()
+        data.push({width: Math.round(Math.random() * 36 + 5), color: Math.round(Math.random() * 100)});
+        render(data)
+        console.log(data)
+    }, 1500)
+</script>
+</html>
