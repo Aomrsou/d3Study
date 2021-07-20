@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    // var dataset = [ 250 , 210 , 170 , 130 , 90 ];  //数据
+    var dataset = [2500, 2100, 1700, 1300, 900];  //数据
+    var rectHeight = 35;   //每个矩形所占的像素高度(包括空白)
+
+    function noScale() {
+
+        var mainsvg = d3.select("body")
+            .append("svg")
+            .attr("width", 1000)
+            .attr("height", 300)
+            .attr("id", "mySvg")
+
+        mainsvg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr("x", 20)
+            .attr("y", (d, i) => i * rectHeight)
+            .attr("width", d => d)
+            .attr("height", rectHeight - 2)
+            .attr("fill", "steelblue")
+    }
+
+    function lineScale() {
+        var rectHeight = 35;   //每个矩形所占的像素高度(包括空白)
+
+        var linearScale = d3.scaleLinear()
+            .domain(d3.extent(dataset, d => d))
+            .range([50, 300]);
+
+        var mainsvg = d3.select("body")
+            .append("svg")
+            .attr("width", 300)
+            .attr("height", 300)
+            .attr("id", "mySvg")
+
+        mainsvg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr("x", 100)
+            .attr("y", (d, i) => i * rectHeight)
+            .attr("width", d => linearScale(d))
+            .attr("height", rectHeight - 2)
+            .attr("fill", "steelblue")
+    }
+
+    function ordScale() {
+        let index = [0, 1, 2, 3, 4];
+        let color = ["red", "blue", "green", "yellow", "black"];
+
+        let ordinalScale = d3.scaleOrdinal()
+            .domain(index)
+            .range(color)
+
+        console.log(ordinalScale(0))
+        console.log(ordinalScale(1))
+        console.log(ordinalScale(2))
+        console.log(ordinalScale(3))
+        console.log(ordinalScale(4))
+
+    }
+
+    function bandScale() {
+        let color = ["red", "blue", "green", "yellow", "black"];
+
+        let bScale = d3.scaleBand()
+            .domain(color)
+            .range([0, 180]); // 平均映射
+
+        var mainsvg = d3.select("body")
+            .append("svg")
+            .attr("width", 300)
+            .attr("height", 300)
+            .attr("id", "mySvg")
+
+        mainsvg.selectAll("rect")
+            .data(color)
+            .enter()
+            .append("rect")
+            .attr("x", 100)
+            .attr("y", d => bScale(d))
+            .attr("width", 30)
+            .attr("height", rectHeight - 2)
+            .attr("fill", "steelblue")
+    }
+
+    noScale()
+    lineScale()
+    ordScale()
+    bandScale()
+
+</script>
+</html>
