@@ -10,5 +10,5 @@
 [d)Transition(演示动画效果)](https://1522017075.github.io/d3Study/static/4-Transition.html)  
 [e)Repeat(演示重复调用一个可视化，输入不同的数据)](https://1522017075.github.io/d3Study/static/5-Repeat.html)  
 [f)Object(演示数据集为对象的情况)](https://1522017075.github.io/d3Study/static/6-Object.html)  
-]
+
 
