@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    let rectWidth = 65;
+    let dataset = [12, 20, 30, 40, 33, 22, 11
+        , 5, 6, 7, 8
+    ];
+
+    let svg = d3.select("body")
+        .append("svg")
+        .attr("width", 1300)
+        .attr("height", 800)
+
+    // 比例尺
+    let xScale = d3.scaleBand()
+        .domain(d3.range(dataset.length))
+        .range([0, dataset.length * rectWidth]);
+
+    let yScale = d3.scaleLinear()
+        .domain([d3.max(dataset), 0])
+        .range([0, 400])
+
+    // 坐标轴
+    let xAxis = d3.axisBottom(xScale).ticks(dataset.length)
+    let yAxis = d3.axisLeft(yScale)
+
+    // 添加坐标轴到页面
+    svg.append("g")
+        .call(xAxis)
+        .attr("transform", "translate(100, 410)")
+
+    svg.append("g")
+        .call(yAxis)
+        .attr("transform", "translate(100, 10)")
+
+    // 添加条形图到坐标轴内
+    svg.selectAll("rect")
+        .data(dataset)
+        .enter()
+        .append("rect")
+        .attr("width", rectWidth - 20)
+        .attr("height", 0)
+        .attr("x", (d, i) => 110 + (i * rectWidth))
+        .attr("y", 410)
+        .attr("fill", "white")
+        .on("mouseover",function(d,i){ // 添加鼠标悬浮之后的方法
+            d3.select(this)
+                .attr("fill","yellow");
+        })
+        .on("mouseout",function(d,i){
+            d3.select(this)
+                .transition()
+                .duration(500)
+                .attr("fill","steelblue");
+        })
+        .transition()
+        .ease(d3.easeBounce)
+        .duration(1000)
+        .attr("height", d => 400 - yScale(d))
+        .attr("y", (d) => 10 + yScale(d))
+        .attr("fill", "steelblue")
+
+
+
+    // 添加文字到每一条上
+    svg.selectAll(".MyText")
+        .data(dataset)
+        .enter()
+        .append("text")
+        .attr("class", "MyText")
+        .attr("transform", "translate(120, 30)")
+        .attr("x", (d, i) => xScale(i))
+        .attr("y", 410)
+        .attr("opacity", 0)
+        .text(d => d)
+        .attr("text-anchor", "right")
+        .transition()
+        .ease(d3.easeBounce)
+        .duration(1000)
+        .attr("y", (d) => yScale(d))
+        .attr("opacity", 1)
+</script>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="./js/d3.min.js"></script>
+  <title>d3学习</title>
+</head>
+<body>
+
+</body>
+<script>
+  d3.interpolators.push(function(a, b) { // 自定义插值器 改版了 还没找到
+    let re = /^([a-z]])$/, ma, mb;
+    if((ma = re.exec(a)) && (mb = re.exec(b))){
+      a = a.charCodeAt(0);
+      let delta = a - b.charCodeAt(0);
+      return function(t) {
+        return String.fromCharCode(Math.ceil(a - delta * t));
+      }
+    }
+  })
+
+  let body = d3.select("body")
+
+  let countdown = body.append("div").append("input")
+
+  countdown.attr("type")
+  countdown.attr("type")
+  countdown.attr("type", "button")
+  .attr("class", "countdown")
+  .attr("value", "a")
+  .transition()
+  .ease("linear")
+  .duration(4000)
+  .delay(300)
+  .attr("value", "z");
+
+
+</script>
+</html>

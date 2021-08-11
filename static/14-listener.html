@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>d3学习</title>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+<script>
+
+    let body = d3.select("body"), duration = 3000;
+
+    let div = body.append("div")
+        .classed("box", true)
+        .style("background-color", "steelblue")
+        .style("color", "white")
+        .text("waiting")
+        .transition()
+        .duration(duration)
+        .delay(1000)
+        .each(function (d, i) { // 这里该用“start” “end” 但是我做不到0.
+            d3.select(this).text(function (d, i) {
+                return "transitioning";
+            });
+        })
+        .style("margin-left", "600px")
+
+</script>
+</html>

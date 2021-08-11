@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>d3学习</title>
+</head>
+<body>
+
+</body>
+<script>
+
+    let height = 500,
+        width = 500,
+        margin = 25,
+        duration = 500,
+        x = d3.scaleLinear()
+            .domain([0, 10])
+            .range([margin, width - margin]),
+        y = d3.scaleLinear()
+            .domain([0, 10])
+            .range([height - margin, margin]);
+
+    let data = d3.range(11).map(function (i) {
+        return {
+            x: i, y: Math.sin(i) * 3 + 5
+        }
+    });
+
+    let svg = d3.select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+
+    render();
+
+    function render() {
+        let line = d3.line()
+            .x(function (d) {
+                return x(d.x)
+            })
+            .y(function (d) {
+                return y(d.y)
+            })
+            .curve(d3.curveStepAfter)
+
+        svg.selectAll("path.line")
+            .data([data])
+            .enter()
+            .append("path")
+            .attr("class", "line");
+
+        svg.selectAll("path.line")
+            .data([data])
+            .attr("d", d => line(d))
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 2.5);
+
+        let area = d3.area()
+            .x(d => x(d.x))
+            .y0(y(0))
+            .y1(d => y(d.y))
+            .curve(d3.curveStepAfter)
+
+        svg.selectAll("path.area")
+            .data([data])
+            .enter()
+            .append("path")
+            .attr("class", "area")
+            .attr("d", d => area(d))
+            .style("fill", "red")
+
+    }
+
+</script>
+</html>

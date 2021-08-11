@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>d3学习</title>
+    <style>
+        .v-bar{
+            background-color: #66ccff;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+<script>
+    let id = 0,
+        data = [],
+        duration = 500,
+        chartHeight = 100,
+        chartWidth = 680;
+
+    for (let i = 0; i < 20; i++)
+        push(data)
+
+    function push(data) {
+        data.push({
+            id: ++id,
+            value: Math.round(Math.random() * (chartHeight - 20) +20)
+        })
+    }
+
+    function render(data) {
+        console.log(data)
+        let selection = d3.select("body")
+            .selectAll("div.v-bar")
+            .data(data, d => d.id)
+
+        // enter
+        selection.enter()
+            .append("div")
+            .attr("class", "v-bar")
+            .style("position", "fixed")
+            .style("top", chartHeight + "px")
+            .style("left", (d, i) => barLeft(i + 1) + "px")
+            .style("height", "0px")
+            .append("span")
+
+        // update
+        selection.transition().duration(duration)
+            .style("top", d => chartHeight - barHeight(d) + "px")
+            .style("left", (d, i) => barLeft(i) + "px")
+            .style("height", d => barHeight(d) + "px")
+            .select("span")
+            .text(d => d.value)
+
+        // exit
+        selection.exit()
+            .transition().duration(duration)
+            .style("left", (d, i) => barLeft(-1) + "px")
+            .remove()
+    }
+
+    function barLeft(i) {
+        return i * (30 + 2);
+    }
+
+    function barHeight(d) {
+        return d.value;
+    }
+
+    setInterval(function () {
+        data.shift()
+        push(data)
+        render(data)
+    }, 2000);
+
+    render(data);
+</script>
+</html>

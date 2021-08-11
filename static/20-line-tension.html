@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>d3学习</title>
+</head>
+<body>
+<div>
+    <button onclick="render([0])">0</button>
+    <button onclick="render([0.2])">0.2</button>
+    <button onclick="render([0.4])">0.4</button>
+    <button onclick="render([0.6])">0.6</button>
+    <button onclick="render([0.8])">0.8</button>
+    <button onclick="render([1])">1</button>
+    <button onclick="render([3])">3</button>
+    <button onclick="render([5])">5</button>
+    <button onclick="render([10])">10</button>
+</div>
+</body>
+<script>
+
+    let height = 500,
+        width = 500,
+        margin = 25,
+        duration = 500,
+        x = d3.scaleLinear()
+            .domain([0, 10])
+            .range([margin, width - margin]),
+        y = d3.scaleLinear()
+            .domain([0, 1])
+            .range([height - margin, margin]);
+
+    let data = [d3.range(10).map(function (i) {
+        return {
+            x: i, y: (Math.sin(i * 3) + 1) / 2
+        }
+    })];
+
+    let svg = d3.select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+
+    render([10]);
+
+    function render(tension) {
+        let line = d3.line()
+            .x(function (d) {
+                return x(d.x)
+            })
+            .y(function (d) {
+                return y(d.y)
+            })
+            .curve(d3.curveCardinal.tension(tension))
+
+        svg.selectAll("path.line")
+            .data(data)
+            .enter()
+            .append("path")
+            .attr("class", "line");
+
+        svg.selectAll("path.line")
+            .transition()
+            .duration(duration)
+            .ease(d3.easeLinear)
+            .attr("d", function (d) {
+                return line(d);
+            })
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 2.5);
+
+        data.forEach(d => {
+            svg.selectAll("circle")
+                .data(d)
+                .enter()
+                .append("circle")
+                .attr("class", "dot")
+                .attr("cx", d => x(d.x))
+                .attr("cy", d => y(d.y))
+                .attr("r", 4.5);
+        })
+
+
+    }
+
+
+</script>
+</html>
