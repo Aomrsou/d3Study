@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>d3学习</title>
+</head>
+<body>
+
+</body>
+<script>
+
+    let r = 200, width = 1080, height = 1080;
+    let svg = d3.select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+
+    let positionLabel = svg.append("text")
+        .attr("x", 10)
+        .attr("y", 30);
+
+    svg.on("mousemove", function () {
+        printPosition()
+    });
+
+    function printPosition() {
+        let position;
+        svg.on('mousemove', function (event, d) {
+            position = d3.pointer(event, svg.node());
+            // console.log(position)
+        })
+        console.log(position)
+        positionLabel.text(position)
+    }
+
+    svg.on("mousemove", function (event, d) {
+        for (let i = 1; i < 2; i++) {
+            let position = d3.pointer(event, svg.node()); // v6版本开始不使用d3.mouse()函数了
+            let circle = svg.append("circle")
+                .attr("cx", position[0])
+                .attr("cy", position[1])
+                .attr("r", 0)
+                .style("stroke-width", 5 / (i))
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .style("stroke", 5 / (i))
+                .transition()
+                .delay(Math.pow(i, 2.5) * 50)
+                .duration(1200)
+                .ease(d3.easeQuadIn)
+                .attr("r", r)
+                .style("stroke-opacity", 0)
+                .transition()
+                .delay(100)
+                .remove()
+
+        }
+    })
+
+</script>
+</html>
