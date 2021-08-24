@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="./js/d3.min.js"></script>
+    <title>d3学习</title>
+    <style type="text/css">
+        svg {
+            border: 1px solid black;
+        }
+
+        circle {
+            fill: #dc143c;
+        }
+    </style>
+</head>
+
+<body>
+
+<script type="text/javascript">
+    var width = 600, height = 350, r = 50;
+
+    var data = [
+        [width / 2 - r, height / 2 - r],
+        [width / 2 - r, height / 2 + r],
+        [width / 2 + r, height / 2 - r],
+        [width / 2 + r, height / 2 + r]
+    ];
+
+    var svg = d3.select("body").append("svg")
+        .attr("style", "1px solid black")
+        .attr("width", width)
+        .attr("height", height)
+        .call( // <-A
+            d3.zoom() // <-B
+                // .scaleExtent([1, 10]) // <-C
+                .on("zoom", d => zoom(d)) // <-D
+
+        )
+        .append("g");
+
+    svg.selectAll("circle")
+        .data(data)
+        .enter().append("circle")
+        .attr("r", r)
+        .attr("transform", function (d) {
+            return "translate(" + d + ")";
+        });
+
+    function zoom(d) { // d3没有直接对图像缩放的，转而变成对svg画布缩放
+      d = d.transform
+      svg.attr("transform", "translate("
+              + d.x + ", " + d.y
+              + ")scale(" + d.k + ")");
+    }
+</script>
+
+</body>
+
+</html>
